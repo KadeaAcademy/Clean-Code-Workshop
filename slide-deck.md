@@ -13,7 +13,7 @@ _class: invert
 }
 
 .col:not(:last-child) {
-	margin-right: 1rem;
+	margin-right: 3rem;
 }
 
 .align-right {
@@ -51,20 +51,9 @@ _class: invert
 
 ---
 
-## Outcomes
+# Outline
 
-After this class students will be able to:
-
-1. recognize the elements of bad code, including within functions, classes,arguments, and comments.
-2. review code with an eye towards cleanliness and design.
-3. plan and execute code cleanup without risk to the application.
-4. incrementally improve bad design choices.
-5. be much more aware of the quality of the code they, and their team-mates are writing.
-
----
-
-## Outline
-
+- Outcomes
 - What does it mean to be clean?
 - What is Clean Code?
 - Bad Code Dumpster Dive
@@ -79,7 +68,19 @@ After this class students will be able to:
 
 ---
 
-## What does it mean to be clean?
+# Outcomes
+
+After this class students will be able to:
+
+1. recognize the elements of bad code, including within functions, classes,arguments, and comments.
+2. review code with an eye towards cleanliness and design.
+3. plan and execute code cleanup without risk to the application.
+4. incrementally improve bad design choices.
+5. be much more aware of the quality of the code they, and their team-mates are writing.
+
+---
+
+# What does it mean to be clean?
 
 - The business cost of bad code.
   - The Productivity Roller-Coaster.
@@ -196,11 +197,92 @@ After this class students will be able to:
 
 ---
 
-# Bad Code Dumpster Dive
+## They Boy Scout Rule
+
+<div class="row">
+  <div class="col align-right">
+    <div class="citation__text">
+      Check the code in cleaner than you checked it out.
+    </div>
+    <br/>
+    <p class="citation__name">Robert C. Martin "Uncle Bob"</p>
+  </div>
+  <div class="col">
+    <img class="citation_image" src="images/bob.png">
+  </div>
+</div>
 
 ---
 
-# Names
+![bg fit](images/wtf.png)
+
+---
+
+# Bad Code Dumpster Dive
+
+```javascript class:"lineNo"
+function testableHtml(pageData, includeSuiteSetup) {
+  const wikiPage = pageData.getWikiPage();
+  let buffer = new StringBuffer();
+  if (pageData.hasAttribute("Test")) {
+    if (includeSuiteSetup) {
+      const suiteSetup = PageCrawlerImpl.getInheritedPage(
+        SuiteResponder.SUITE_SETUP_NAME,
+        wikiPage
+      );
+      if (suiteSetup != null) {
+        const pagePath = suiteSetup.getPageCrawler().getFullPath(suiteSetup);
+        const pagePathName = PathParser.render(pagePath);
+        buffer.append("!include -setup .").append(pagePathName).append("\n");
+      }
+    }
+    const setup = PageCrawlerImpl.getInheritedPage("SetUp", wikiPage);
+    if (setup != null) {
+      const setupPath = wikiPage.getPageCrawler().getFullPath(setup);
+      const setupPathName = PathParser.render(setupPath);
+      buffer.append("!include -setup .").append(setupPathName).append("\n");
+    }
+  }
+  buffer.append(pageData.getContent());
+  if (pageData.hasAttribute("Test")) {
+    const teardown = PageCrawlerImpl.getInheritedPage("TearDown", wikiPage);
+    if (teardown != null) {
+      const tearDownPath = wikiPage.getPageCrawler().getFullPath(teardown);
+      const tearDownPathName = PathParser.render(tearDownPath);
+      buffer
+        .append("\n")
+        .append("!include -teardown .")
+        .append(tearDownPathName)
+        .append("\n");
+    }
+  }
+}
+```
+
+---
+
+# Bad Code Dumpster Dive
+
+```javascript {.line-numbers}
+function renderPageWithSetupsAndTeardowns(pageData, isSuite) {
+  const isTestPage = pageData.hasAttribute("Test");
+  if (isTestPage) {
+    const testPage = pageData.getWikiPage();
+    let newPageContent = new StringBuffer();
+    includeSetupPages(testPage, newPageContent, isSuite);
+    newPageContent.append(pageData.getContent());
+    includeTeardownPages(testPage, newPageContent, isSuite);
+    pageData.setContent(newPageContent.toString());
+  }
+  return pageData.getHtml();
+}
+```
+
+<img src="images/logo.png" class="clean-logo">
+
+---
+
+# Noms significatifs
 
 ---
 
@@ -212,11 +294,11 @@ After this class students will be able to:
 
 ---
 
-# Comments
+# Commentaires
 
 ---
 
-# Formatting
+# Formatting: Mise en forme
 
 ---
 
