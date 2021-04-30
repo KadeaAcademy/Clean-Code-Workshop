@@ -54,16 +54,15 @@ _class: invert
 # Outline
 
 - Outcomes
-- What does it mean to be clean?
 - What is Clean Code?
 - Bad Code Dumpster Dive
-- Names
-- Functions
-- Demonstration: Cleaning Code
-- Comments
-- Formatting
-- Practice
-- Exercises
+- [**Meaningful Names**](#Meaningful-Names)
+- [**Functions**](#Functions)
+- [**Comments**](#Comments)
+- [**Formatting**](#Formatting)
+- Error Handling
+- Unit Testing
+- Practice: Cleaning Code
 - Some tools
 
 ---
@@ -543,52 +542,6 @@ controller, manager, driver; // confusing
 
 ---
 
-# Meaningful Names
-
-## Use Solution Domain Names
-
-```javascript
-AccountVisitor, JobQueue;
-// people who read your code will be programmers
-```
-
-## Add Meaningful Context
-
-```javascript
-    firstName, lastName, street, city, state, zipcode
-
-    // a better solution
-    addrFirstName, addrLastName, addrState
-
-    // a better solution
-    Class Address
-```
-
-<img src="images/logo.png" class="clean-logo">
-
----
-
-# Meaningful Names
-
-## Don’t Add Gratuitous Context
-
-```javascript
-    Address
-    // is a fine name for a class
-    AccountAddress, CustomerAddress
-    // are fine names for instances of the class Address
-    // but could be poor names for classes
-
-    MAC addresses, port addresses, Web addresses
-
-    // a better solution
-    PostalAddress, MAC, URI
-```
-
-<img src="images/logo.png" class="clean-logo">
-
----
-
 # Functions
 
 ## Small!
@@ -676,55 +629,21 @@ const pagePathName = PathParser.render(pagePath);
 .append("\n")
 ```
 
-## Reading Code from Top to Bottom
-
-```
-// the Stepdown Rule
-```
-
-<img src="images/logo.png" class="clean-logo">
-
 ---
 
 # Functions
 
-## Switch Statements
+## The Step Down Rule: Reading Code from Top to Bottom
 
-```javascript
-class Employee...
-  payAmount() {
-    switch (getType()) {
-    case EmployeeType.ENGINEER:
-      return _monthlySalary;
-    case EmployeeType.SALESMAN:
-      return _monthlySalary + _commission;
-    case EmployeeType.MANAGER:
-      return _monthlySalary + _bonus;
-    default:
-      throw "Incorrect Employee";
-    }
-  }
+We want the code to read like a top-down narrative.
+
+We want to be able to read the program as though it were a set of **TO** paragraphs, each of which is describing the current level of abstraction and referencing subsequent **TO** paragraphs at the next level down.
+
 ```
-
----
-
-# Functions
-
-## Switch Statements
-
-```javascript
-class EmployeeType...
-  payAmount(employee)...
-
-class Salesman extends EmployeeType...
-  payAmount(employee) {
-    return employee.getMonthlySalary() + employee.getCommission();
-  }
-
-class Manager extends EmployeeType...
-  payAmount(employee) {
-    return employee.getMonthlySalary() + employee.getBonus();
-  }
+To include the setups and teardowns, we include setups, then we include the test page content, and then we include the teardowns.
+  To include the setups, we include the suite setup if this is a suite, then we include the regular setup.
+  To include the suite setup, we search the parent hierarchy for the “SuiteSetUp” page and add an include statement with the path of that page.
+  To search the parent...
 ```
 
 <img src="images/logo.png" class="clean-logo">
@@ -735,16 +654,16 @@ class Manager extends EmployeeType...
 
 ## Use Descriptive Names
 
-```javascript
-(testableHtml) => includeSetupAndTeardownPages;
+- Shoud contain a verb/action e.g. `renderPage`, `checkIfPageRendered`, etc.
+- Don’t be afraid to make a name long! e.g. `includeSetupAndTeardownPages`
+- A long descriptive name is better than a short enigmatic name.
+- A long descriptive name is better than a long descriptive comment.
+- Don’t be afraid to spend time choosing a name.
+- Be consistent in your names. Use the same phrases, nouns, and verbs in the function names you choose for your modules.
 
-includeSetupAndTeardownPages,
-  includeSetupPages,
-  includeSuiteSetupPage,
-  includeSetupPage;
-// what happened to
-includeTeardownPages, includeSuiteTeardownPage, includeTeardownPage;
-```
+---
+
+# Functions
 
 ## Function Arguments
 
@@ -758,71 +677,20 @@ includeTeardownPages, includeSuiteTeardownPage, includeTeardownPage;
 
 # Functions
 
-## Common Monadic Forms
+## Do not transform the input
+
+If a function is going to transform its input argument, the transformation should appear as the return value
 
 ```javascript
-// if a function is going to transform its input argument, // the transformation should appear as the return value
-
-StringBuffer transform(in)
-// is better than
-void transform(out)
+function transform(in) {
+  const out = applyTransformation(in)
+  return out;
+}
+// is Betten than
+function transform(in) {
+  applyInPlaceTransformation(in)
+}
 ```
-
-## Flag Arguments
-
-```javascript
-render(true);
-```
-
----
-
-# Functions
-
-## Common Monadic Forms
-
-```javascript
-// asking a question about that argument
-
-fileExists(“MyFile”)
-// operating on that argument, transforming and returning it
-fileOpen(“MyFile”)
-// event, use the argument to alter the state of the system
-passwordAttemptFailedNtimes(attempts)
-```
-
-## Flag Arguments
-
-```javascript
-renderForSuite();
-renderForSingleTest();
-```
-
-<img src="images/logo.png" class="clean-logo">
-
----
-
-# Functions
-
-## Dyadic Functions
-
-```javascript
-writeField(name);
-// is easier to understand than
-writeField(outputStream, name);
-
-// perfectly reasonable
-const p = new Point(0, 0);
-// problematic
-assertEquals(expected, actual);
-```
-
-## Triads
-
-```
-  assertEquals(message, expected, actual)
-```
-
-<img src="images/logo.png" class="clean-logo">
 
 ---
 
@@ -853,16 +721,10 @@ assertExpectedEqualsActual(expected, actual);
 
 ## Have No Side Effects
 
-```javascript
+Side effects are lies. Your function promises to do one thing, but it also does other hidden things.
+
+```
 // do something or answer something, but not both
-set(attribute, value);
-
-setAndCheckIfExists
-
-if (attributeExists("username")) {
-  setAttribute("username", "unclebob");
-  ...
-}
 ```
 
 <img src="images/logo.png" class="clean-logo">
@@ -1007,22 +869,6 @@ return buildList(text.substring(match.end()));
 ```
 
 <img src="images/logo.png" class="clean-logo">
-
----
-
-# Comments (bad)
-
-## Mumbling
-
-```javascript
-try {
-  const propertiesPath = propertiesLocation + "/" + PROPERTIES_FILE;
-  const propertiesStream = new FileInputStream(propertiesPath);
-  loadedProperties.load(propertiesStream);
-} catch (e) {
-  // No properties files means all defaults are loaded
-}
-```
 
 ---
 
@@ -1218,22 +1064,6 @@ response.setBody(formatter.getResultStream(), formatter.getByteCount());
 
 # Comments (bad)
 
-## Nonlocal Information
-
-```javascript
-/*
-- Port on which fitnesse would run. Defaults to <b>8082</b>. \*
-- @param fitnessePort
-*/
-setFitnessePort(fitnessePort) {
-  this.fitnessePort = fitnessePort;
-}
-```
-
----
-
-# Comments (bad)
-
 ## Too Much Information
 
 ```javascript
@@ -1247,22 +1077,14 @@ When encoding a bit stream via the base64 encoding, the bit stream must be presu
 
 ---
 
-# Comments (bad)
+# Formatting
 
-## Inobvious Connection
-
-```javascript
-/*
-start with an array that is big enough to hold all the pixels
-(plus filter bytes), and an extra 200 bytes for header info
-*/
-this.pngBytes = new byte[(this.width + 1) * this.height * 3 + 200]();
-```
-
-## Function Headers
+## Team Rules
 
 ```javascript
-// short functions don’t need much description
+// every programmer has his own favorite formatting rules
+// but if he works in a team
+// then the team rules
 ```
 
 ---
@@ -1372,6 +1194,8 @@ class FitNesseExpediter extends ResponseSender {
  }
 ```
 
+<img src="images/logo.png" class="clean-logo">
+
 ---
 
 # Formatting
@@ -1405,17 +1229,7 @@ class CommentWidget extends TextWidget {
 
 ```
 
----
-
-# Formatting
-
-## Team Rules
-
-```javascript
-// every programmer has his own favorite formatting rules
-// but if he works in a team
-// then the team rules
-```
+<img src="images/logo.png" class="clean-logo">
 
 ---
 
@@ -1456,6 +1270,8 @@ try {
 }
 ```
 
+<img src="images/logo.png" class="clean-logo">
+
 ---
 
 # Error Handling
@@ -1482,11 +1298,11 @@ function logError(e) {
 }
 ```
 
+<img src="images/logo.png" class="clean-logo">
+
 ---
 
 # Error Handling
-
----
 
 ## Error Handling Is One Thing
 
@@ -1497,33 +1313,6 @@ function logError(e) {
 // if the keyword try exists in a function
 // it should be the very first word in the function and that
 // there should be nothing after the catch/finally blocks
-```
-
----
-
-# Error Handling
-
-## Define the Normal Flow
-
-```javascript
-try {
-  const expenses = expenseReportDAO.getMeals(employee.getID());
-  m_total += expenses.getTotal();
-} catch(MealExpensesNotFound e) {
-  m_total += getMealPerDiem();
-}
-
-```
-
----
-
-# Error Handling
-
-## Define the Normal Flow
-
-```javascript
-MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());
-m_total += expenses.getTotal();
 ```
 
 ---
@@ -1543,59 +1332,18 @@ if (employees != null) {
 
 ---
 
-# Error Handling
-
-## Don’t Return Null
-
-```javascript
-const employees = getEmployees();
-for(let e of employees) {
-  totalPay += e.getPay();
-}
-
-function getEmployees() {
-  if( .. there are no employees .. )
-    return [];
-}
-```
-
----
-
-# Error Handling
-
-## Don’t Pass Null
-
-```javascript
-
-function xProjection(p1, p2) {
-  return (p2.x – p1.x) * 1.5;
-}
-
-function xProjection(p1, p2) {
-  if (p1 == null || p2 == null) {
-    throw "Invalid argument for MetricsCalculator.xProjection";
-  }
-  return (p2.x – p1.x) * 1.5;
-}
-```
-
----
-
 # Unit Tests
 
 ## The Three Laws of TDD
 
-```javascript
-// first law
-// you may not write production code until
-// you have written a failing unit test
-// second law
-// you may not write more of a unit test
-// than is sufficient to fail, and not compiling is failing
-// third law
-// you may not write more production code
-// than is sufficient to pass the currently failing test
-```
+**First law**
+You may not write production code until you have written a failing unit test.
+
+**Second law**
+You may not write more of a unit test than is sufficient to fail, and not compiling is failing.
+
+**Third law**
+You may not write more production code than is sufficient to pass the currently failing test.
 
 ---
 
@@ -1705,13 +1453,8 @@ Simple Design Rules 4: Minimal Classes and Methods
 - Formatter = a tools that scans your files for style issues and automatically reformats your code to ensure consistent rules
 - **Formating rules**: e.g. `max-len`, `no-mixed-spaces-and-tabs`, `keyword-spacing`,etc.
 
-```javascript
-foo(
-  reallyLongArg(),
-  omgSoManyParameters(),
-  IShouldRefactorThis(),
-  isThereSeriouslyAnotherOne()
-);
+```
+foo(reallyLongArg(),omgSoManyParameters(),IShouldRefactorThis(),isThereSeriouslyAnotherOne());
 ```
 
 ```javascript
