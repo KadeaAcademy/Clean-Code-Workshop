@@ -287,6 +287,7 @@ function renderPageWithSetupsAndTeardowns(pageData, isSuite) {
 # Meaningful Names
 
 ---
+
 # Meaningful Names
 
 ## Use Intention-Revealing Names
@@ -296,14 +297,15 @@ function getThem(theList) {
   const list1 = [];
   for (let x of theList) {
     if (x[0] == 4) {
-      list1.push(x)
+      list1.push(x);
     }
-  };
+  }
   return list1;
 }
 ```
 
 ---
+
 # Meaningful Names
 
 ## Use Intention-Revealing Names
@@ -323,6 +325,7 @@ function getFlaggedCells(gameBoard) {
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Meaningful Names
 
 ## Avoid Disinformation
@@ -342,10 +345,11 @@ function copyChars(a1, a2) {
   for (let i = 0; i < a1.length; i++) {
     a2[i] = a1[i];
   }
- }
+}
 ```
 
 ---
+
 # Meaningful Names
 
 ## Use Pronounceable Names
@@ -354,13 +358,14 @@ function copyChars(a1, a2) {
 class DtaRcrd102 {
   constructor(genymdhms, modymdhms) {
     this.genymdhms = genymdhms;
-    this.modymdhms= modymdhms;
+    this.modymdhms = modymdhms;
   }
   pszqint = "102"; /* ... */
-};
+}
 ```
 
 ---
+
 # Meaningful Names
 
 ## Use Pronounceable Names
@@ -372,41 +377,44 @@ class Customer {
     this.modificationTimestamp = modificationTimestamp;
   }
   recordId = "102"; /* ... */
-};
+}
 ```
 
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Meaningful Names
 
 ## Use Searchable Names
 
 ```javascript
-    for (let j = 0; j < 34; j++) {
-      s += (t[j] * 4) / 5;
-    }
+for (let j = 0; j < 34; j++) {
+  s += (t[j] * 4) / 5;
+}
 ```
 
 ---
+
 # Meaningful Names
 
 ## Use Searchable Names
 
 ```javascript
-    const realDaysPerIdealDay = 4;
-    const WORK_DAYS_PER_WEEK = 5;
-    let sum = 0;
-    for (let j = 0; j < NUMBER_OF_TASKS; j++) {
-      const realTaskDays = taskEstimate[j] * realDaysPerIdealDay;
-      const realTaskWeeks = (realdays / WORK_DAYS_PER_WEEK);
-      sum += realTaskWeeks;
-    }
+const realDaysPerIdealDay = 4;
+const WORK_DAYS_PER_WEEK = 5;
+let sum = 0;
+for (let j = 0; j < NUMBER_OF_TASKS; j++) {
+  const realTaskDays = taskEstimate[j] * realDaysPerIdealDay;
+  const realTaskWeeks = realdays / WORK_DAYS_PER_WEEK;
+  sum += realTaskWeeks;
+}
 ```
 
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Meaningful Names
 
 ## Member Prefixes (Avoid encodings)
@@ -430,6 +438,7 @@ class Customer {
 ```
 
 ---
+
 # Meaningful Names
 
 ## Member Prefixes (Avoid encodings)
@@ -444,6 +453,7 @@ class Customer {
       }
     }
 ```
+
 ## Hungarian Notation(Avoid encodings)
 
 ```javascript
@@ -453,6 +463,7 @@ PhoneNumber phone;
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Meaningful Names
 
 ## Avoid Mental Mapping
@@ -469,6 +480,7 @@ Manager, Processor, Data, Info;
 ```
 
 ---
+
 # Meaningful Names
 
 ## Avoid Mental Mapping
@@ -488,6 +500,7 @@ Customer, WikiPage, Account, AddressParser;
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Meaningful Names
 
 ## Method Names
@@ -509,6 +522,7 @@ Customer, WikiPage, Account, AddressParser;
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Meaningful Names
 
 ## Pick One Word per Concept
@@ -528,6 +542,7 @@ controller, manager, driver; // confusing
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Meaningful Names
 
 ## Use Solution Domain Names
@@ -552,6 +567,7 @@ AccountVisitor, JobQueue;
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Meaningful Names
 
 ## Don’t Add Gratuitous Context
@@ -572,6 +588,7 @@ AccountVisitor, JobQueue;
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Functions
 
 ## Small!
@@ -583,7 +600,6 @@ AccountVisitor, JobQueue;
 // < 150 characters per line
 // < 20 lines
 ```
-<img src="images/logo.png" class="clean-logo">
 
 ## Do One Thing
 
@@ -591,6 +607,57 @@ AccountVisitor, JobQueue;
 // FUNCTIONS SHOULD DO ONE THING. THEY SHOULD DO IT WELL.
 // THEY SHOULD DO IT ONLY.
 ```
+
+<img src="images/logo.png" class="clean-logo">
+
+---
+
+# Functions
+
+## One line block
+
+Blocks within `if`,`else`, `while` statements, and so on should be one line long. Probably that line should be a **function call**.
+
+```javascript
+function renderPageWithSetupsAndTeardowns(pageData, isSuite) {
+  const isTestPage = pageData.hasAttribute("Test");
+  if (isTestPage) {
+    const testPage = pageData.getWikiPage();
+    const newPageContent = new StringBuffer();
+    includeSetupPages(testPage, newPageContent, isSuite);
+    newPageContent.append(pageData.getContent());
+    includeTeardownPages(testPage, newPageContent, isSuite);
+    pageData.setContent(newPageContent.toString());
+  }
+  return pageData.getHtml();
+}
+```
+
+---
+
+## One line block
+
+Blocks within `if`,`else`, `while` statements, and so on should be one line long. Probably that line should be a **function call**.
+
+```javascript
+function includeSetupAndTeardownPages(pageDate, isSuite) {
+  const testPage = pageData.getWikiPage();
+  const newPageContent = new StringBuffer();
+  includeSetupPages(testPage, newPageContent, isSuite);
+  newPageContent.append(pageData.getContent());
+  includeTeardownPages(testPage, newPageContent, isSuite);
+  pageData.setContent(newPageContent.toString());
+}
+
+function renderPageWithSetupsAndTeardowns(pageData, isSuite) {
+  if (isTestPage(pageData)) {
+    includeSetupAndTeardownPages(pageData, isSuite);
+  }
+  return pageData.getHtml();
+}
+```
+
+<img src="images/logo.png" class="clean-logo">
 
 ---
 
@@ -614,6 +681,7 @@ const pagePathName = PathParser.render(pagePath);
 ```
 // the Stepdown Rule
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -637,7 +705,9 @@ class Employee...
     }
   }
 ```
+
 ---
+
 # Functions
 
 ## Switch Statements
@@ -656,6 +726,7 @@ class Manager extends EmployeeType...
     return employee.getMonthlySalary() + employee.getBonus();
   }
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -680,6 +751,7 @@ includeTeardownPages, includeSuiteTeardownPage, includeTeardownPage;
 ```javascript
 // the ideal number of arguments for a function is zero
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -724,6 +796,7 @@ passwordAttemptFailedNtimes(attempts)
 renderForSuite();
 renderForSingleTest();
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -748,9 +821,11 @@ assertEquals(expected, actual);
 ```
   assertEquals(message, expected, actual)
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
+
 # Functions
 
 ## Argument Objects
@@ -769,6 +844,7 @@ writeField(name);
 assertEquals(expected, actual);
 assertExpectedEqualsActual(expected, actual);
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -788,6 +864,7 @@ if (attributeExists("username")) {
   ...
 }
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -811,6 +888,7 @@ if (attributeExists("username")) {
 // occasional multiple return, break, or continue statement
 // can sometimes even be more expressive Dijkstra’s rules
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -833,6 +911,7 @@ if ((employee.flags & HOURLY_FLAG) && (employee.age > 65))
 // better
 if (employee.isEligibleForFullBenefits())
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -857,6 +936,7 @@ responderInstance();
 // format matched kk:mm:ss EEE, MMM dd, yyyy
 const timeMatcher = Pattern.compile("\\d*:\\d*:\\d* \\w*, \\w* \\d*, \\d*");
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -883,6 +963,7 @@ for (let i = 0; i < 25000; i++) {
 ```javascript
 assertTrue(a.compareTo(b) == -1); // a < b assertTrue(b.compareTo(a) == 1); // b > a
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -907,6 +988,7 @@ function makeStandardHttpDateFormat() {
 //TODO-MdM these are not needed
 // We expect this to go away when we do the checkout model
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -923,6 +1005,7 @@ const listItemContent = match.group(3).trim();
 new ListItemWidget(this, listItemContent, this.level + 1);
 return buildList(text.substring(match.end()));
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -936,7 +1019,7 @@ try {
   const propertiesPath = propertiesLocation + "/" + PROPERTIES_FILE;
   const propertiesStream = new FileInputStream(propertiesPath);
   loadedProperties.load(propertiesStream);
-} catch(e) {
+} catch (e) {
   // No properties files means all defaults are loaded
 }
 ```
@@ -999,7 +1082,9 @@ cd.tracks = tracks;
 cd.duration = durationInMinutes;
  }
 ```
+
 ---
+
 # Comments (bad)
 
 ## Journal Comments
@@ -1105,7 +1190,9 @@ response.setBody(formatter.getResultStream(), formatter.getByteCount());
 // const reader = new StreamReader(resultsStream);
 // response.setContent(reader.read(formatter.getByteCount()));
 ```
+
 ---
+
 # Comments (bad)
 
 ## HTML Comments
@@ -1126,7 +1213,9 @@ response.setBody(formatter.getResultStream(), formatter.getByteCount());
 * &lt;execute-fitnesse-tests
  ;
 ```
+
 ---
+
 # Comments (bad)
 
 ## Nonlocal Information
@@ -1155,7 +1244,9 @@ These 24 bits are then treated as 4 concatenated 6-bit groups, each of which is 
 When encoding a bit stream via the base64 encoding, the bit stream must be presumed to be ordered with the most- significant-bit first.
 */
 ```
+
 ---
+
 # Comments (bad)
 
 ## Inobvious Connection
@@ -1165,7 +1256,7 @@ When encoding a bit stream via the base64 encoding, the bit stream must be presu
 start with an array that is big enough to hold all the pixels
 (plus filter bytes), and an extra 200 bytes for header info
 */
-this.pngBytes = new byte[((this.width + 1) * this.height * 3) + 200];
+this.pngBytes = new byte[(this.width + 1) * this.height * 3 + 200]();
 ```
 
 ## Function Headers
@@ -1196,6 +1287,7 @@ this.pngBytes = new byte[((this.width + 1) * this.height * 3) + 200];
 // each blank line is a visual cue
 // that identifies a new and separate concept
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -1218,6 +1310,7 @@ this.pngBytes = new byte[((this.width + 1) * this.height * 3) + 200];
 // conceptual affinity
 // certain bits of code want to be near other bits
 ```
+
 <img src="images/logo.png" class="clean-logo">
 
 ---
@@ -1242,6 +1335,7 @@ function root2(a, b, c) {
 ```
 
 ---
+
 # Formatting
 
 ## Horizontal Alignment
@@ -1258,7 +1352,9 @@ class FitNesseExpediter extends ResponseSender {
   ...
  }
 ```
+
 ---
+
 # Formatting
 
 ## Horizontal Alignment
@@ -1275,7 +1371,9 @@ class FitNesseExpediter extends ResponseSender {
   ...
  }
 ```
+
 ---
+
 # Formatting
 
 ## Breaking Indentation
@@ -1291,6 +1389,7 @@ class CommentWidget extends TextWidget {
 ---
 
 # Formatting
+
 ## Breaking Indentation
 
 ```javascript
@@ -1307,7 +1406,9 @@ class CommentWidget extends TextWidget {
 ```
 
 ---
+
 # Formatting
+
 ## Team Rules
 
 ```javascript
@@ -1315,28 +1416,32 @@ class CommentWidget extends TextWidget {
 // but if he works in a team
 // then the team rules
 ```
+
 ---
+
 # Error Handling
 
 ## Prefer Exceptions to Returning Error Codes
 
 ```javascript
-    if (deletePage(page) == E_OK) {
-      if (registry.deleteReference(page.name) == E_OK) {
-        if (configKeys.deleteKey(page.name.makeKey()) == E_OK) {
-          logger.log("page deleted");
-        } else {
-          logger.log("configKey not deleted");
-        }
-      } else {
-        logger.log("deleteReference from registry failed");
-      }
+if (deletePage(page) == E_OK) {
+  if (registry.deleteReference(page.name) == E_OK) {
+    if (configKeys.deleteKey(page.name.makeKey()) == E_OK) {
+      logger.log("page deleted");
     } else {
-      logger.log("delete failed");
-      return E_ERROR;
+      logger.log("configKey not deleted");
     }
+  } else {
+    logger.log("deleteReference from registry failed");
+  }
+} else {
+  logger.log("delete failed");
+  return E_ERROR;
+}
 ```
+
 ---
+
 # Error Handling
 
 ## Prefer Exceptions to Returning Error Codes
@@ -1346,13 +1451,13 @@ try {
   deletePage(page);
   registry.deleteReference(page.name);
   configKeys.deleteKey(page.name.makeKey());
-}
-catch (e) {
+} catch (e) {
   logger.log(e.getMessage());
 }
-
 ```
+
 ---
+
 # Error Handling
 
 ## Extract Try/Catch Blocks
@@ -1375,11 +1480,14 @@ function deletePageAndAllReferences(page) {
 function logError(e) {
   logger.log(e.getMessage());
 }
-
 ```
+
 ---
+
 # Error Handling
+
 ---
+
 ## Error Handling Is One Thing
 
 ```javascript
@@ -1390,7 +1498,9 @@ function logError(e) {
 // it should be the very first word in the function and that
 // there should be nothing after the catch/finally blocks
 ```
+
 ---
+
 # Error Handling
 
 ## Define the Normal Flow
@@ -1404,7 +1514,9 @@ try {
 }
 
 ```
+
 ---
+
 # Error Handling
 
 ## Define the Normal Flow
@@ -1413,20 +1525,24 @@ try {
 MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());
 m_total += expenses.getTotal();
 ```
+
 ---
+
 # Error Handling
+
 ## Don’t Return Null
 
 ```javascript
 const employees = getEmployees();
 if (employees != null) {
-  for(let e of employees) {
+  for (let e of employees) {
     totalPay += e.getPay();
   }
 }
-
 ```
+
 ---
+
 # Error Handling
 
 ## Don’t Return Null
@@ -1442,7 +1558,9 @@ function getEmployees() {
     return [];
 }
 ```
+
 ---
+
 # Error Handling
 
 ## Don’t Pass Null
@@ -1460,7 +1578,9 @@ function xProjection(p1, p2) {
   return (p2.x – p1.x) * 1.5;
 }
 ```
+
 ---
+
 # Unit Tests
 
 ## The Three Laws of TDD
@@ -1475,9 +1595,10 @@ function xProjection(p1, p2) {
 // third law
 // you may not write more production code
 // than is sufficient to pass the currently failing test
-
 ```
+
 ---
+
 # Unit Tests
 
 ## Keeping Tests Clean
@@ -1492,24 +1613,28 @@ function xProjection(p1, p2) {
 // what makes a clean test? three things
 // readability, readability, and readability
 ```
+
 ---
+
 # Unit Tests
 
 ## One Assert per Test
 
 ```javascript
-      // tests come to a single conclusion
-      // that is quick and easy to understand
+// tests come to a single conclusion
+// that is quick and easy to understand
 ```
 
 ## Single Concept per Test
 
 ```javascript
-      // the best rule is that you should
-      // minimize the number of asserts per concept and
-      // test just one concept per test function
+// the best rule is that you should
+// minimize the number of asserts per concept and
+// test just one concept per test function
 ```
+
 ---
+
 # Unit Tests
 
 ## F.I.R.S.T.
@@ -1520,7 +1645,9 @@ function xProjection(p1, p2) {
 // Repeatable
 // Self-validating // Timely
 ```
+
 ---
+
 # Classes
 
 ## Class Organization
@@ -1536,10 +1663,12 @@ function xProjection(p1, p2) {
 ## Classes Should Be Small!
 
 ```javascript
-      // the first rule is that they should be small
-      // the second rule is that they should be smaller than that
+// the first rule is that they should be small
+// the second rule is that they should be smaller than that
 ```
+
 ---
+
 # Classes
 
 ## The Single Responsibility Principle (SRP)
@@ -1577,9 +1706,14 @@ Simple Design Rules 4: Minimal Classes and Methods
 - **Formating rules**: e.g. `max-len`, `no-mixed-spaces-and-tabs`, `keyword-spacing`,etc.
 
 ```javascript
-foo(reallyLongArg(),omgSoManyParameters(),IShouldRefactorThis(),isThereSeriouslyAnotherOne()
+foo(
+  reallyLongArg(),
+  omgSoManyParameters(),
+  IShouldRefactorThis(),
+  isThereSeriouslyAnotherOne()
 );
 ```
+
 ```javascript
 foo(
   reallyLongArg(),
